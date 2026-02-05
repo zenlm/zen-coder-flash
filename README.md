@@ -87,7 +87,68 @@ response = generate(model, tokenizer, prompt="Write a Rust function for quicksor
 print(response)
 ```
 
-## Training
+## Training Options
+
+### 1. MLX (Apple Silicon) - Fastest Local
+
+```bash
+# Install MLX
+pip install mlx mlx-lm
+
+# Train with LoRA (M1/M2/M3)
+python training/train_mlx.py
+
+# Options
+python training/train_mlx.py --iters 500 --batch-size 2 --lr 1e-5
+
+# Fuse adapters
+python training/train_mlx.py fuse
+
+# Test
+python training/train_mlx.py test
+```
+
+### 2. CUDA (Local GPU)
+
+```bash
+# Single GPU
+python training/train_cuda.py
+
+# Multi-GPU
+torchrun --nproc_per_node 4 training/train_cuda.py
+
+# Options
+python training/train_cuda.py --epochs 3 --batch-size 2 --lora-rank 64
+```
+
+### 3. HuggingFace Spaces (Cloud)
+
+Deploy `training/hf_space/` to a GPU Space:
+
+1. Create Space: https://huggingface.co/new-space
+2. Select GPU (T4/A10G/A100)
+3. Upload `training/hf_space/app.py` and `requirements.txt`
+4. Train via Gradio UI
+
+### 4. Cloud (8x H200) - Full Dataset
+
+```bash
+# Nebius/cloud with SLURM
+python training/launch_training.py --config training/configs/8xh200.yaml
+
+# Dry run first
+python training/launch_training.py --dry-run
+
+# Docker locally
+python training/launch_training.py --local
+```
+
+| Option | Hardware | Time | Cost |
+|--------|----------|------|------|
+| MLX | M1/M2/M3 | ~30 min | Free |
+| CUDA Local | 1x RTX 4090 | ~2 hours | Free |
+| HF Space | T4/A10G | ~1 hour | $0.60/hr |
+| Cloud | 8x H200 | ~8 hours | ~$288 |
 
 ### Dataset
 
@@ -95,31 +156,6 @@ Training uses `hanzoai/zen-agentic-dataset-private`:
 - **10.5B tokens** from 214K conversations
 - Claude Code interactions + git commits
 - Real-world coding scenarios
-
-### Infrastructure (8x H200)
-
-```bash
-# Launch training on Nebius AI Cloud
-cd training
-python launch_training.py --config configs/8xh200.yaml
-```
-
-| Parameter | Value |
-|-----------|-------|
-| GPUs | 8x H200 141GB |
-| Method | LoRA (rank 64, alpha 128) |
-| Batch Size | 128 (effective) |
-| Context | 32K tokens (training) |
-| Time | ~8 hours |
-| Cost | ~$288 |
-
-### Gym Training
-
-```bash
-# Using zoo-gym framework
-cd /path/to/gym
-gym train configs/zen_coder_flash.yaml
-```
 
 ## Directory Structure
 
