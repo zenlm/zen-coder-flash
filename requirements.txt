@@ -1,0 +1,35 @@
+# Zen Coder Flash - Dependencies
+# Install: pip install -r requirements.txt
+
+# Core Training
+torch>=2.2.0
+transformers>=4.45.0
+accelerate>=0.30.0
+peft>=0.10.0
+bitsandbytes>=0.43.0
+datasets>=2.18.0
+
+# Distributed Training
+deepspeed>=0.14.0
+
+# Flash Attention (optional but recommended)
+flash-attn>=2.5.0
+
+# Data Processing
+tiktoken>=0.6.0
+sentencepiece>=0.2.0
+safetensors>=0.4.0
+
+# Logging
+wandb>=0.16.0
+tensorboard>=2.16.0
+
+# HuggingFace Hub
+huggingface-hub>=0.22.0
+
+# Config
+pyyaml>=6.0
+
+# Evaluation
+evaluate>=0.4.0
+lm-eval>=0.4.0

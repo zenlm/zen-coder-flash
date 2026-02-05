@@ -1,0 +1,51 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+*.so
+.eggs/
+*.egg-info/
+dist/
+build/
+
+# Environments
+.env
+.venv
+venv/
+ENV/
+
+# Data
+*.jsonl
+!training/data/README.md
+
+# Outputs
+output/
+saves/
+checkpoints/
+logs/
+*.log
+
+# Model files
+*.safetensors
+*.bin
+*.pt
+*.pth
+*.gguf
+*.onnx
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# Secrets
+*.pem
+*.key
+credentials.json
+
+# Generated
+submit.slurm
+compose.yml

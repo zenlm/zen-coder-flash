@@ -1,0 +1,107 @@
+# Zen Coder Flash - 8x H200 Training Configuration
+# For Nebius AI Cloud or similar CUDA clusters
+
+### Cluster ###
+cluster:
+  provider: nebius
+  gpu_type: H200-141GB
+  gpu_count: 8
+  interconnect: nvlink
+  memory_per_gpu: 141GB
+  total_memory: 1.1TB
+
+### Model ###
+model:
+  name: zai-org/GLM-4.7-Flash
+  type: moe
+  total_params: 31B
+  active_params: 3B
+  context_length: 131072
+  architecture: Glm4MoeLiteForCausalLM
+
+### Dataset ###
+dataset:
+  name: hanzoai/zen-agentic-dataset-private
+  total_tokens: 10.5B
+  conversations: 214163
+  format: sharegpt
+  split:
+    train: 0.99
+    valid: 0.01
+  preprocessing:
+    max_length: 32768
+    truncation: true
+    padding: max_length
+
+### Training ###
+training:
+  method: lora
+  epochs: 3
+  batch_size_per_gpu: 4
+  gradient_accumulation: 4
+  effective_batch_size: 128  # 4 * 4 * 8
+
+  # Learning Rate
+  learning_rate: 2.0e-5
+  lr_scheduler: cosine
+  warmup_ratio: 0.03
+  weight_decay: 0.01
+  max_grad_norm: 1.0
+
+  # LoRA Config
+  lora:
+    rank: 64
+    alpha: 128
+    dropout: 0.05
+    target_modules:
+      - q_proj
+      - k_proj
+      - v_proj
+      - o_proj
+      - gate_proj
+      - up_proj
+      - down_proj
+
+  # Precision
+  bf16: true
+  tf32: true
+
+  # Optimization
+  flash_attention: true
+  gradient_checkpointing: true
+  fsdp:
+    sharding_strategy: FULL_SHARD
+    auto_wrap_policy: transformer_layer
+    backward_prefetch: BACKWARD_PRE
+    forward_prefetch: true
+
+### Logging ###
+logging:
+  wandb:
+    project: zen-coder-flash
+    entity: zenlm
+    run_name: 8xH200-${timestamp}
+  tensorboard: true
+  log_steps: 10
+
+### Checkpointing ###
+checkpointing:
+  save_steps: 500
+  save_total_limit: 5
+  resume_from_checkpoint: auto
+  output_dir: /data/checkpoints/zen-coder-flash
+
+### Evaluation ###
+evaluation:
+  eval_steps: 500
+  eval_batch_size: 2
+  metrics:
+    - loss
+    - perplexity
+
+### Cost Estimate ###
+cost:
+  gpu_hour_rate: 4.50  # H200 per hour USD
+  estimated_hours: 8
+  total_gpu_hours: 64  # 8 GPUs * 8 hours
+  estimated_cost: 288  # USD
