@@ -12,7 +12,7 @@ import json
 import subprocess
 from pathlib import Path
 
-BASE_MODEL = "lmstudio-community/GLM-4.7-Flash-MLX-8bit"
+BASE_MODEL = "lmstudio-community/GLM-4.7-Flash-MLX-6bit"
 SCRIPT_DIR = Path(__file__).parent
 OUTPUT_DIR = SCRIPT_DIR / "output" / "mlx-adapters"
 DATA_DIR = SCRIPT_DIR / "data"
