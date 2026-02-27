@@ -7,20 +7,20 @@
 
 ## Overview
 
-**Zen Coder Flash** is the flagship code-focused model in the Zen AI family. Built on GLM-4.7-Flash's cutting-edge Mixture of Experts architecture, it delivers frontier coding performance with practical efficiency.
+**Zen Coder Flash** is the flagship code-focused model in the Zen AI family. Built on a cutting-edge Mixture of Experts architecture, it delivers frontier coding performance with practical efficiency.
 
 | Attribute | Value |
 |-----------|-------|
 | **Parameters** | 31B total / 3B active (MoE) |
 | **Context Length** | 131,072 tokens |
-| **Base Model** | [GLM-4.7-Flash](https://huggingface.co/zai-org/GLM-4.7-Flash) |
+| **Architecture** | 31B MoE, 3B active |
 | **License** | MIT |
 | **SWE-bench** | 59.2% |
 | **Languages** | 100+ programming languages |
 
 ## Why Zen Coder Flash?
 
-- **59.2% SWE-bench** vs 22% Qwen3-30B - nearly **3x better** at real coding tasks
+- **59.2% SWE-bench** vs 22% for comparable 30B models - nearly **3x better** at real coding tasks
 - **Efficient MoE**: 31B params but only 3B active per token
 - **131K context**: Handle entire codebases in a single prompt
 - **Native tool calling**: Built-in function execution support
@@ -62,8 +62,7 @@ print(tokenizer.decode(outputs[0], skip_special_tokens=True))
 ```bash
 vllm serve zenlm/zen-coder-flash \
     --tensor-parallel-size 4 \
-    --tool-call-parser glm47 \
-    --reasoning-parser glm45 \
+    --tool-call-parser zen-coder \
     --enable-auto-tool-choice
 ```
 
@@ -73,7 +72,7 @@ vllm serve zenlm/zen-coder-flash \
 python -m sglang.launch_server \
     --model-path zenlm/zen-coder-flash \
     --tp-size 4 \
-    --tool-call-parser glm47 \
+    --tool-call-parser zen-coder \
     --speculative-algorithm EAGLE
 ```
 
@@ -178,8 +177,8 @@ zen-coder-flash/
 
 ## Performance
 
-| Benchmark | Score | vs Qwen3-30B |
-|-----------|-------|--------------|
+| Benchmark | Score | vs comparable 30B models |
+|-----------|-------|--------------------------|
 | SWE-bench Verified | **59.2%** | +37.2% (2.7x) |
 | AIME 2025 | **91.6%** | +6.6% |
 | GPQA | **75.2%** | +1.8% |
@@ -190,11 +189,11 @@ zen-coder-flash/
 - **HuggingFace**: [zenlm/zen-coder-flash](https://huggingface.co/zenlm/zen-coder-flash)
 - **Website**: [zenlm.org](https://zenlm.org)
 - **Organization**: [Hanzo AI](https://hanzo.ai)
-- **Base Model**: [GLM-4.7-Flash](https://huggingface.co/zai-org/GLM-4.7-Flash)
+- **Architecture**: 31B MoE, 3B active parameters
 
 ## License
 
-MIT License - inherited from GLM-4.7-Flash base model.
+MIT License
 
 ## Citation
 
