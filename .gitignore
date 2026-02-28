@@ -49,3 +49,7 @@ credentials.json
 # Generated
 submit.slurm
 compose.yml
+CLAUDE.md
+AGENTS.md
+GEMINI.md
+QWEN.md
